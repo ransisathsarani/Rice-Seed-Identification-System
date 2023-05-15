@@ -34,9 +34,21 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button type="submit" class="btn btn-info">Submit</button>
+            <button id="submit-btn" type="submit" class="btn btn-info"> Submit</button>
         </div>
     </div>
 
 </form>
 @endsection
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        // Add a click event listener to the button
+        $('#submit-btn').on('click', function() {
+            // Add the spinner class to the button
+            $(this).addClass('fa fa-spinner fa-spin');
+            // Perform the form submission or other action here
+        });
+
+    });
+</script>

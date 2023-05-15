@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\RunPythonScript;
 use App\Models\SeedImages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class SeedImagesController extends Controller
 {
@@ -43,17 +46,37 @@ class SeedImagesController extends Controller
 
         $input = $request->all();
 
-        if ($image = $request->file('image')) {
+        if ($request->hasFile('image')) {
             $destinationPath = 'image/';
-            $seedImage = $request->file('image')->getClientOriginalName();
+            $image = $request->file('image');
+            $seedImage =  'new_image.' . $image->getClientOriginalExtension();
+            // delete the old image if it exists
+            if (Storage::exists($destinationPath . $input['image'])) {
+                Storage::delete($destinationPath . $input['image']);
+            }
+
             $image->move($destinationPath, $seedImage);
-            $input['image'] = "$seedImage";
+
+            $input['image'] = time() . '_' . $seedImage;
         }
 
         SeedImages::create($input);
 
+        // dispatch the job
+        RunPythonScript::dispatch();
+
+        Log::info('RUN model.py');
+
+        $output = [];
+        // Run the python model
+        exec('/usr/local/bin/python3 /Users/ransisathsarani/Documents/IIT/Rice-Seed-Identification-System/model.py', $output);
+        $predicted_class = end($output);
+
+        Log::info('End RUN model.py: Output: ' . $predicted_class);
+
         return redirect()->route('seed-images.index')
-            ->with('success', 'Image Uploaded Successfully.');
+            ->with('success', "Image Identified Successfully")
+            ->with('predicted_class', $predicted_class);
     }
 
     /**
