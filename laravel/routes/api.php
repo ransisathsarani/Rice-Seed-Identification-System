@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// http://127.0.0.1:8000/api/v1/get-rice-seed-info
+
+Route::group(['prefix' => '/v1'], function () {
+    Route::get('get-rice-seed-info', [\App\Http\Controllers\SeedImagesController::class, 'getRiceSeedInfo']);
+});
