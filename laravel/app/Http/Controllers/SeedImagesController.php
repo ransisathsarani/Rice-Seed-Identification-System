@@ -41,7 +41,7 @@ class SeedImagesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000000',
         ]);
 
         $input = $request->all();
