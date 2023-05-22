@@ -50,7 +50,7 @@ class SeedImagesController extends Controller
             $destinationPath = 'image/';
             $image = $request->file('image');
             $seedImage =  'new_image.' . $image->getClientOriginalExtension();
-            // delete the old image if it exists
+  
             if (Storage::exists($destinationPath . $input['image'])) {
                 Storage::delete($destinationPath . $input['image']);
             }
