@@ -23,32 +23,32 @@
 </div>
 @endif
 
-<form action="{{ route('seed-images.store') }}" method="POST" enctype="multipart/form-data">
+<form id="form" action="{{ route('seed-images.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
 
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Image:</strong>
-                <input type="file" name="image" class="form-control" placeholder="image">
+                <input type="file" name="image" accept="image/*" class="form-control" placeholder="image" required>
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-            <button id="submit-btn" type="submit" class="btn btn-info"> Submit</button>
+            <button type="button" class="btn btn-info" onclick="submitForm(this)">
+                Submit
+            </button>
+            <span class="spinner-border spinner-border-sm text-info d-none" role="status" aria-hidden="true"></span>
         </div>
     </div>
 
 </form>
 @endsection
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Add a click event listener to the button
-        $('#submit-btn').on('click', function() {
-            // Add the spinner class to the button
-            $(this).addClass('fa fa-spinner fa-spin');
-            // Perform the form submission or other action here
-        });
-
-    });
+<script>
+    function submitForm(button) {
+        button.disabled = true; // Disable the button
+        button.innerHTML = 'Loading...'; // Change the button text to 'Loading...'
+        $(button).next('.spinner-border').removeClass('d-none'); // Show the spinner
+        $(button).closest('form').submit(); // Submit the form
+    }
 </script>

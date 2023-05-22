@@ -41,7 +41,7 @@ class SeedImagesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000000',
         ]);
 
         $input = $request->all();
@@ -50,7 +50,7 @@ class SeedImagesController extends Controller
             $destinationPath = 'image/';
             $image = $request->file('image');
             $seedImage =  'new_image.' . $image->getClientOriginalExtension();
-            // delete the old image if it exists
+  
             if (Storage::exists($destinationPath . $input['image'])) {
                 Storage::delete($destinationPath . $input['image']);
             }
